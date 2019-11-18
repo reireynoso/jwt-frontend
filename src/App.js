@@ -1,24 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import Header from './Header'
+import SignInForm from './SignInForm';
+import LoginForm from './LoginForm'
 
 function App() {
+  const [user, setUser] = useState({})
+  const [form, setForm] = useState("")
+
+  const handleLogin = (user) => {
+    console.log(user)
+  }
+
+  const handleFormSwitch = (input) => {
+    setForm(input)
+  }
+
+  const renderForm = () => {
+    switch(form){
+      case "login":
+        return <LoginForm handleLogin={handleLogin}/>
+        break;
+      default:
+        return <SignInForm handleLogin={handleLogin}/>
+    }
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Header handleFormSwitch={handleFormSwitch}/>
+        {
+          renderForm()
+        }
     </div>
   );
 }
