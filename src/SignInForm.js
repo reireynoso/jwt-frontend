@@ -14,9 +14,21 @@ function SignInForm(props) {
 
     const handleSubmit = (evt) => {
         evt.preventDefault()
-        props.handleLogin({
-            username,
-            password
+        fetch(`http://localhost:3000/users`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            localStorage.setItem("token", data.jwt)
+            props.handleLogin(data.user)
         })
         setUsername("")
         setPassword("")
@@ -26,20 +38,21 @@ function SignInForm(props) {
         padding: "20px",
         width: "80%"
     }
+    
     return(
         <div style={formDivStyle}>
             <h1>Sign Up</h1>
-            <form class="ui form" onSubmit={handleSubmit}>
-                <div class="field">
+            <form className="ui form" onSubmit={handleSubmit}>
+                <div className="field">
                     <label>Username</label>
                     <input value={username} onChange={handleUsernameChange} type="text" placeholder="username"/>
                 </div>
-                <div class="field">
+                <div className="field">
                     <label>Password</label>
                     <input value={password} onChange={handlePasswordChange} type="password" placeholder="password"/>
                 </div>
                 
-                <button class="ui button" type="submit">Submit</button>
+                <button className="ui button" type="submit">Submit</button>
             </form>
         </div>
     )

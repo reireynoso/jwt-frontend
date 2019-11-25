@@ -14,9 +14,21 @@ function LoginForm(props){
 
     const handleSubmit = (evt) => {
         evt.preventDefault()
-        props.handleLogin({
-            username,
-            password
+        fetch(`http://localhost:3000/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            localStorage.setItem("token", data.jwt)
+            props.handleLogin(data.user)
         })
         setUsername("")
         setPassword("")
